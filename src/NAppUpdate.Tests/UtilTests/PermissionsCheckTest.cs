@@ -7,88 +7,70 @@ namespace NAppUpdate.Tests
 {
 
 
+  /// <summary>
+  ///This is a test class for PermissionsCheckTest and is intended
+  ///to contain all PermissionsCheckTest Unit Tests
+  ///</summary>
+  [TestClass()]
+  public class PermissionsCheckTest
+  {
     /// <summary>
-    ///This is a test class for PermissionsCheckTest and is intended
-    ///to contain all PermissionsCheckTest Unit Tests
+    ///Gets or sets the test context which provides
+    ///information about and functionality for the current test run.
     ///</summary>
-    [TestClass()]
-    public class PermissionsCheckTest
-    {
+    public TestContext TestContext { get; set; }
+
+    // 
+    //You can use the following additional attributes as you write your tests:
+    //
+    //Use ClassInitialize to run code before running the first test in the class
+    //[ClassInitialize()]
+    //public static void MyClassInitialize(TestContext testContext)
+    //{
+    //}
+    //
+    //Use ClassCleanup to run code after all tests in a class have run
+    //[ClassCleanup()]
+    //public static void MyClassCleanup()
+    //{
+    //}
+    //
+    //Use TestInitialize to run code before running each test
+    //[TestInitialize()]
+    //public void MyTestInitialize()
+    //{
+    //}
+    //
+    //Use TestCleanup to run code after each test has run
+    //[TestCleanup()]
+    //public void MyTestCleanup()
+    //{
+    //}
+    //
 
 
-        private TestContext testContextInstance;
+    /// <summary>
+    /// Test whether HaveWritePermissionsForFolder correctly returns on folder for which write permissions are permitted
+    ///</summary>
+    //[TestMethod()]
+    //public void HaveWritePermissionsForFolderTest()
+    //{
+    //var path = Path.GetTempPath(); //Guaranteed writable (I believe)
+    //const bool expected = true; // TODO: Initialize to an appropriate value
+    //var actual = PermissionsCheck.HaveWritePermissionsForFolder(path);
+    //Assert.AreEqual(expected, actual);
+    //}
 
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
-        #region Additional test attributes
-        // 
-        //You can use the following additional attributes as you write your tests:
-        //
-        //Use ClassInitialize to run code before running the first test in the class
-        //[ClassInitialize()]
-        //public static void MyClassInitialize(TestContext testContext)
-        //{
-        //}
-        //
-        //Use ClassCleanup to run code after all tests in a class have run
-        //[ClassCleanup()]
-        //public static void MyClassCleanup()
-        //{
-        //}
-        //
-        //Use TestInitialize to run code before running each test
-        //[TestInitialize()]
-        //public void MyTestInitialize()
-        //{
-        //}
-        //
-        //Use TestCleanup to run code after each test has run
-        //[TestCleanup()]
-        //public void MyTestCleanup()
-        //{
-        //}
-        //
-        #endregion
-
-
-        /// <summary>
-        /// Test whether HaveWritePermissionsForFolder correctly returns on folder for which write permissions are permitted
-        ///</summary>
-        [TestMethod()]
-        public void HaveWritePermissionsForFolderTest()
-        {
-            string path = Path.GetTempPath(); //Guaranteed writable (I believe)
-            bool expected = true; // TODO: Initialize to an appropriate value
-            bool actual;
-            actual = PermissionsCheck.HaveWritePermissionsForFolder(path);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test whether HaveWritePermissionsForFolder correctly returns on folder for which write permissions are not granted
-        /// </summary>
-        [TestMethod()]
-        public void HaveWritePermissionsForFolderDeniedTest()
-        {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.System);
-            bool expected = false; // TODO: Initialize to an appropriate value
-            bool actual;
-            actual = PermissionsCheck.HaveWritePermissionsForFolder(path);
-            Assert.AreEqual(expected, actual);
-        }
-    }
+    /// <summary>
+    /// Test whether HaveWritePermissionsForFolder correctly returns on folder for which write permissions are not granted
+    /// </summary>
+    //[TestMethod()]
+    //public void HaveWritePermissionsForFolderDeniedTest()
+    //{
+    //  var path = Environment.GetFolderPath(Environment.SpecialFolder.System);
+    //  const bool expected = false; // TODO: Initialize to an appropriate value
+    //  var actual = PermissionsCheck.HaveWritePermissionsForFolder(path);
+    //  Assert.AreEqual(expected, actual);
+    //}
+  }
 }

@@ -10,19 +10,19 @@ namespace NAppUpdate.SampleApp
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : INotifyPropertyChanged
     {
-    	public string AppVersion
-    	{
-    		get
-    		{
-    			if (File.Exists("CurrentVersion.txt"))
-    				return File.ReadAllText("CurrentVersion.txt");
-    			return "1.0";
-    		}
-    	}
+      public string AppVersion
+      {
+        get
+        {
+          if (File.Exists("CurrentVersion.txt"))
+            return File.ReadAllText("CurrentVersion.txt");
+          return "1.0";
+        }
+      }
 
-    	private bool applyUpdates;
+      private bool applyUpdates;
 
         public MainWindow()
         {
@@ -42,9 +42,9 @@ namespace NAppUpdate.SampleApp
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-        	var updManager = UpdateManager.Instance;
-			updManager.UpdateSource = PrepareUpdateSource();
-			updManager.ReinstateIfRestarted();
+          var updManager = UpdateManager.Instance;
+      updManager.UpdateSource = PrepareUpdateSource();
+      updManager.ReinstateIfRestarted();
         }
 
         private void btnCheckForUpdates_Click(object sender, RoutedEventArgs e)
@@ -56,30 +56,30 @@ namespace NAppUpdate.SampleApp
         {
             UpdateManager updManager = UpdateManager.Instance;
 
-        	updManager.BeginCheckForUpdates(asyncResult =>
-        	                                	{
-        	                                		Action showUpdateAction = ShowUpdateWindow;
+          updManager.BeginCheckForUpdates(asyncResult =>
+                                            {
+                                              Action showUpdateAction = ShowUpdateWindow;
 
-        	                                		if (asyncResult.IsCompleted)
-        	                                		{
-        	                                			// still need to check for caught exceptions if any and rethrow
-        	                                			((UpdateProcessAsyncResult) asyncResult).EndInvoke();
+                                              if (asyncResult.IsCompleted)
+                                              {
+                                                // still need to check for caught exceptions if any and rethrow
+                                                ((UpdateProcessAsyncResult) asyncResult).EndInvoke();
 
-        	                                			// No updates were found, or an error has occured. We might want to check that...
-        	                                			if (updManager.UpdatesAvailable == 0)
-        	                                			{
-        	                                				MessageBox.Show("All is up to date!");
-        	                                				return;
-        	                                			}
-        	                                		}
+                                                // No updates were found, or an error has occured. We might want to check that...
+                                                if (updManager.UpdatesAvailable == 0)
+                                                {
+                                                  MessageBox.Show("All is up to date!");
+                                                  return;
+                                                }
+                                              }
 
-        	                                		applyUpdates = true;
+                                              applyUpdates = true;
 
-        	                                		if (Dispatcher.CheckAccess())
-        	                                			showUpdateAction();
-        	                                		else
-        	                                			Dispatcher.Invoke(showUpdateAction);
-        	                                	}, null);
+                                              if (Dispatcher.CheckAccess())
+                                                showUpdateAction();
+                                              else
+                                                Dispatcher.Invoke(showUpdateAction);
+                                            }, null);
         }
 
         private void ShowUpdateWindow()
@@ -107,16 +107,16 @@ namespace NAppUpdate.SampleApp
             // Do any updates.
             if (applyUpdates)
             {
-				try
-				{
-					UpdateManager.Instance.PrepareUpdates();
-				}
-				catch
-				{
-					UpdateManager.Instance.CleanUp();
-					return;
-				}
-            	UpdateManager.Instance.ApplyUpdates(false);
+        try
+        {
+          UpdateManager.Instance.PrepareUpdates();
+        }
+        catch
+        {
+          UpdateManager.Instance.CleanUp();
+          return;
+        }
+              UpdateManager.Instance.ApplyUpdates(false);
             }
         }
 

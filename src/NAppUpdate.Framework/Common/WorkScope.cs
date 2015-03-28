@@ -5,12 +5,12 @@ namespace NAppUpdate.Framework.Common
 	// TODO: This isn't air tight, it is just "good enough"
 	public class WorkScope : IDisposable
 	{
-		private readonly Action<bool> isWorkingFunc;
+		private readonly Action<bool> _isWorkingFunc;
 
 		public WorkScope(Action<bool> b)
 		{
-			isWorkingFunc = b;
-			isWorkingFunc(true);
+			_isWorkingFunc = b;
+			_isWorkingFunc(true);
 		}
 
 		internal static IDisposable New(Action<bool> action)
@@ -20,7 +20,7 @@ namespace NAppUpdate.Framework.Common
 
 		public void Dispose()
 		{
-			isWorkingFunc(false);
+			_isWorkingFunc(false);
 		}
 	}
 }

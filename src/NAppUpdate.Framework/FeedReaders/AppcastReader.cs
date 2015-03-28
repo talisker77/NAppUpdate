@@ -5,37 +5,37 @@ using NAppUpdate.Framework.Conditions;
 
 namespace NAppUpdate.Framework.FeedReaders
 {
-    public class AppcastReader : IUpdateFeedReader
+  public class AppcastReader : IUpdateFeedReader
+  {
+    // http://learn.adobe.com/wiki/display/ADCdocs/Appcasting+RSS
+
+    public IList<IUpdateTask> Read(string feed)
     {
-        // http://learn.adobe.com/wiki/display/ADCdocs/Appcasting+RSS
+      var doc = new XmlDocument();
+      doc.LoadXml(feed);
+      var nl = doc.SelectNodes("/rss/channel/item");
 
-        #region IUpdateFeedReader Members
+      var ret = new List<IUpdateTask>();
 
-        public IList<IUpdateTask> Read(string feed)
+      foreach (XmlNode n in nl)
+      {
+        var task = new FileUpdateTask
         {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(feed);
-            XmlNodeList nl = doc.SelectNodes("/rss/channel/item");
+          Description = n["description"].InnerText,
+          UpdateTo = n["enclosure"].Attributes["url"].Value
+        };
 
-            List<IUpdateTask> ret = new List<IUpdateTask>();
+        var cnd = new FileVersionCondition
+        {
+          Version = n["appcast:version"].InnerText
+        };
+        if (task.UpdateConditions == null) task.UpdateConditions = new BooleanCondition();
+        task.UpdateConditions.AddCondition(cnd, BooleanCondition.ConditionType.AND);
 
-            foreach (XmlNode n in nl)
-            {
-                FileUpdateTask task = new FileUpdateTask();
-                task.Description = n["description"].InnerText;
-                task.UpdateTo = n["enclosure"].Attributes["url"].Value;
+        ret.Add(task);
+      }
 
-                FileVersionCondition cnd = new FileVersionCondition();
-                cnd.Version = n["appcast:version"].InnerText;
-				if (task.UpdateConditions == null) task.UpdateConditions = new BooleanCondition();
-                task.UpdateConditions.AddCondition(cnd, BooleanCondition.ConditionType.AND);
-
-                ret.Add(task);
-            }
-
-            return ret;
-        }
-
-        #endregion
+      return ret;
     }
+  }
 }

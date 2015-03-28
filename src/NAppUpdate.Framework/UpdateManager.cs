@@ -16,9 +16,7 @@ namespace NAppUpdate.Framework
 	/// </summary>
 	public sealed class UpdateManager
 	{
-		#region Singleton Stuff
-
-		/// <summary>
+	  /// <summary>
 		/// Defaut ctor
 		/// </summary>
 		private UpdateManager()
@@ -57,9 +55,7 @@ namespace NAppUpdate.Framework
 		private static Mutex _shutdownMutex;
 // ReSharper restore NotAccessedField.Local
 
-		#endregion
-
-		/// <summary>
+	  /// <summary>
 		/// State of the update process
 		/// </summary>
 		[Serializable]
@@ -94,9 +90,7 @@ namespace NAppUpdate.Framework
 		public bool IsWorking { get { return _isWorking; } private set { _isWorking = value; } }
 		private volatile bool _isWorking;
 
-		#region Progress reporting
-
-		public event ReportProgressDelegate ReportProgress;
+	  public event ReportProgressDelegate ReportProgress;
 		private void TaskProgressCallback(UpdateProgressInfo currentStatus, IUpdateTask task)
 		{
 			if (ReportProgress == null) return;
@@ -111,11 +105,7 @@ namespace NAppUpdate.Framework
 			ReportProgress(currentStatus);
 		}
 
-		#endregion
-
-		#region Step 1 - Check for updates
-
-		/// <summary>
+	  /// <summary>
 		/// Check for update synchronously, using the default update source
 		/// </summary>
 		public void CheckForUpdates()
@@ -213,11 +203,7 @@ namespace NAppUpdate.Framework
 			ar.EndInvoke();
 		}
 
-		#endregion
-
-		#region Step 2 - Prepare to execute update tasks
-
-		/// <summary>
+	  /// <summary>
 		/// Prepare updates synchronously
 		/// </summary>
 		public void PrepareUpdates()
@@ -313,11 +299,7 @@ namespace NAppUpdate.Framework
 			ar.EndInvoke();
 		}
 
-		#endregion
-
-		#region Step 3 - Apply updates
-
-		/// <summary>
+	  /// <summary>
 		/// Starts the updater executable and sends update data to it, and relaunch the caller application as soon as its done
 		/// </summary>
 		/// <returns>True if successful (unless a restart was required</returns>
@@ -495,9 +477,7 @@ namespace NAppUpdate.Framework
 			}
 		}
 
-		#endregion
-
-		public void ReinstateIfRestarted()
+	  public void ReinstateIfRestarted()
 		{
 			lock (UpdatesToApply)
 			{

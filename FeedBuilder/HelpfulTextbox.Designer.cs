@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace FeedBuilder
 {
 	partial class HelpfulTextBox
 	{
-		/// <summary>
+	  private const int EM_SETCUEBANNER = 0x1501;
+
+	  /// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
@@ -23,9 +26,7 @@ namespace FeedBuilder
 			base.Dispose(disposing);
 		}
 
-		#region Component Designer generated code
-
-		/// <summary>
+	  /// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
@@ -34,7 +35,8 @@ namespace FeedBuilder
 			components = new System.ComponentModel.Container();
 		}
 
-		#endregion
+	  [DllImport("user32.dll", CharSet = CharSet.Auto)]
+	  private static extern Int32 SendMessage(IntPtr hWnd, int msg, int wParam, [MarshalAs(UnmanagedType.LPWStr)] string lParam);
 	}
 
 }

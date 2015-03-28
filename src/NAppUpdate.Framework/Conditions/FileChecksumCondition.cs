@@ -5,42 +5,42 @@ using NAppUpdate.Framework.Tasks;
 
 namespace NAppUpdate.Framework.Conditions
 {
-	[Serializable]
-    public class FileChecksumCondition : IUpdateCondition
+  [Serializable]
+  public class FileChecksumCondition : IUpdateCondition
+  {
+    [NauField("localPath",
+        "The local path of the file to check. If not set but set under a FileUpdateTask, the LocalPath of the task will be used. Otherwise this condition will be ignored."
+        , false)]
+    public string LocalPath { get; set; }
+
+    [NauField("checksum", "Checksum expected from the file", true)]
+    public string Checksum { get; set; }
+
+    [NauField("checksumType", "Type of checksum to calculate", true)]
+    public string ChecksumType { get; set; }
+
+    public bool IsMet(IUpdateTask task)
     {
-        [NauField("localPath",
-            "The local path of the file to check. If not set but set under a FileUpdateTask, the LocalPath of the task will be used. Otherwise this condition will be ignored."
-            , false)]
-        public string LocalPath { get; set; }
+      var localPath = !string.IsNullOrEmpty(LocalPath) ? LocalPath : Utils.Reflection.GetNauAttribute(task, "LocalPath") as string;
 
-        [NauField("checksum", "Checksum expected from the file", true)]
-        public string Checksum { get; set; }
+      // local path is invalid, we can't check for anything so we will return as if the condition was met
+      if (string.IsNullOrEmpty(localPath))
+        return true;
 
-        [NauField("checksumType", "Type of checksum to calculate", true)]
-        public string ChecksumType { get; set; }
+      // if the local file does not exist, checksums don't match vacuously
+      if (!File.Exists(localPath))
+        return false;
 
-        public bool IsMet(IUpdateTask task)
-        {
-            var localPath = !string.IsNullOrEmpty(LocalPath) ? LocalPath : Utils.Reflection.GetNauAttribute(task, "LocalPath") as string;
+      if ("sha256".Equals(ChecksumType, StringComparison.InvariantCultureIgnoreCase))
+      {
+        var sha256 = Utils.FileChecksum.GetSHA256Checksum(localPath);
+        if (!string.IsNullOrEmpty(sha256) && sha256.Equals(Checksum))
+          return true;
+      }
 
-            // local path is invalid, we can't check for anything so we will return as if the condition was met
-            if (string.IsNullOrEmpty(localPath))
-                return true;
+      // TODO: Support more checksum algorithms (although SHA256 isn't known to have collisions, other are more commonly used)
 
-            // if the local file does not exist, checksums don't match vacuously
-            if (!File.Exists(localPath))
-                return false;
-
-            if ("sha256".Equals(ChecksumType, StringComparison.InvariantCultureIgnoreCase))
-            {
-                var sha256 = Utils.FileChecksum.GetSHA256Checksum(localPath);
-                if (!string.IsNullOrEmpty(sha256) && sha256.Equals(Checksum))
-                    return true;
-            }
-
-            // TODO: Support more checksum algorithms (although SHA256 isn't known to have collisions, other are more commonly used)
-
-            return false;
-        }
+      return false;
     }
+  }
 }

@@ -22,12 +22,7 @@ namespace FeedBuilder
 
 		#region "Win32 DLL Imports"
 
-		private const int EM_SETCUEBANNER = 0x1501;
-
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		private static extern Int32 SendMessage(IntPtr hWnd, int msg, int wParam, [MarshalAs(UnmanagedType.LPWStr)] string lParam);
-
-		#endregion
+	  #endregion
 
 		private string _helpfulText;
 
